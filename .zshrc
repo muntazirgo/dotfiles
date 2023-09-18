@@ -309,3 +309,6 @@ function nvims() {
 }
 
 ulimit -n 4096
+
+# Github Token
+# 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
