@@ -23,15 +23,18 @@ mv () {
 echo "${RED}${BOLD}Do you want to backup the old dotfiles? (Y/n) \c"
 # reading the user input
 read backup
-# checking the user input
-declare -a bash=( $(command ls -A "$HOME/.dotfiles/home/") )
+
+# The files to be stored and linked
+declare -a home=( $(command ls -A "$HOME/.dotfiles/home/") )
 declare -a dotconfig=( $(command ls -A "$HOME/.dotfiles/config/") )
+
+# checking the user input
 case $backup in
         # if the user typed yes or y or just pressed enter
     ""|[Yy]|[Yy][Ee][Ss])
         # $HOME dotfiles
-        for i in ${bash[@]}; do
-            if [[ ! -f "$HOME/${i}" ]]; then
+        for i in ${home[@]}; do
+            if [[ ! -f "$HOME/${i}" && ! -d "$HOME/${i}" ]]; then
                 echo "\n${GREEN}${BOLD}Linking ${i}${RESET}"
                 ln "$HOME/.dotfiles/home/${i}" "$HOME"
             elif [[ ! -L "$HOME/${i}" && -f "$HOME/${i}" ]]; then
@@ -43,7 +46,7 @@ case $backup in
 
         # $HOME/.config dotfiles
         for i in ${dotconfig[@]}; do
-            if [[ ! -f "$HOME/.config/${i}" ]]; then
+            if [[ ! -f "$HOME/.config/${i}" && ! -d "$HOME/.config/${i}" ]]; then
                 echo "\n${GREEN}${BOLD}Linking ${i}${RESET}"
                 ln "$HOME/.dotfiles/config/${i}" "$HOME/.config"
             elif [[ ! -L "$HOME/.config/${i}" && -f "$HOME/.config/${i}" ]]; then
@@ -56,7 +59,7 @@ case $backup in
         # if the user typed no or n
     [Nn]|[Nn][Oo])
         # $HOME dotfiles
-        for i in ${bash[@]}; do
+        for i in ${home[@]}; do
             echo "\n${GREEN}${BOLD}Linking ${i}${RESET}"
             ln -f "$HOME/.dotfiles/home/${i}" "$HOME"
         done
@@ -73,17 +76,17 @@ case $backup in
         exit 1
         ;;
 esac
-# #
-# # #
-# # # checking for some packages
-# # # packages=(fzf nvim fzy)
-# # # for i in ${packages[@]}; do
-# # #     command -v "${i}" >/dev/null 2>&1
-# # #     if [[ $? -eq 0 ]]; then
-# # #         echo "Git command found"
-# # #     else
-# # #         echo "Git command not found"
-# # #         # echo "${RED}${BOLD}Installing fzf${RESET}"
-# # #         # sudo xbps-install -y fzf
-# # #     fi
-# # # done
+
+# installing neovim config
+command -v git >/dev/null 2>&1
+if [[ $? -ne 0 ]]; then
+    sudo xbps-install -S git
+else
+    if [[ ! -d "$HOME/.config/nvim" ]]; then
+        git clone https://github.com/muntazirgo/astronvim_config.git "$HOME/.config/nvim"
+    else
+        echo "\n${GREEN}${BOLD}NEOVIM"
+        echo "\n${GREEN}${BOLD}${HOME}/.config/nvim/ exists!"
+        echo "${GREEN}${BOLD}Remove it and run the script again if you want to clone the configs from github"
+    fi
+fi
