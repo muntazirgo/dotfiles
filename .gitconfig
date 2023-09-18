@@ -1,0 +1,27 @@
+[user]
+	name = muntazir
+	email = bdjjejfjdj@gmail.com
+[credential]
+	helper = store
+[core]
+	editor = nvim
+	; pager = nvim +Man! -c \"set nu\"
+  pager = less
+[color]
+	ui = auto
+[init]
+	defaultBranch = master
+
+[alias]
+	st = "status -sb"
+  ll = "log --oneline"
+
+[merge]
+	tool = "nvim"
+
+[mergetool]
+	keepBackup = false
+	prompt = false
+
+[mergetool "nvim"]
+	cmd = "nvim -d -c \"wincmd l\" -c \"norm ]c\" \"$LOCAL\" \"$MERGED\" \"$REMOTE\""
