@@ -24,8 +24,8 @@ echo "${RED}${BOLD}Do you want to backup the old dotfiles? (Y/n) \c"
 # reading the user input
 read backup
 # checking the user input
-declare -a bash=( $(command ls ./.bash*) ./.gitconfig ./.git-credentials ./.mpd ./.ncmpcpp ./.xinitrc $(command ls ./.zsh*) )
-declare -a dotconfig=( $(command ls ./.config/) )
+declare -a bash=( $(command ls -A "$HOME/.dotfiles/home/") )
+declare -a dotconfig=( $(command ls -A "$HOME/.dotfiles/config/") )
 case $backup in
         # if the user typed yes or y or just pressed enter
     ""|[Yy]|[Yy][Ee][Ss])
@@ -33,11 +33,11 @@ case $backup in
         for i in ${bash[@]}; do
             if [[ ! -f "$HOME/${i}" ]]; then
                 echo "\n${GREEN}${BOLD}Linking ${i}${RESET}"
-                ln "$HOME/.dotfiles/${i}" "$HOME"
+                ln "$HOME/.dotfiles/home/${i}" "$HOME"
             elif [[ ! -L "$HOME/${i}" && -f "$HOME/${i}" ]]; then
                 echo "\n${GREEN}${BOLD}Linking ${i}${RESET}"
                 mv "$HOME/${i}" "$HOME/${i}_backup"
-                ln "$HOME/.dotfiles/${i}" "$HOME"
+                ln "$HOME/.dotfiles/home/${i}" "$HOME"
             fi
         done
 
@@ -45,11 +45,11 @@ case $backup in
         for i in ${dotconfig[@]}; do
             if [[ ! -f "$HOME/.config/${i}" ]]; then
                 echo "\n${GREEN}${BOLD}Linking ${i}${RESET}"
-                ln "$HOME/.dotfiles/.config/${i}" "$HOME/.config"
+                ln "$HOME/.dotfiles/config/${i}" "$HOME/.config"
             elif [[ ! -L "$HOME/.config/${i}" && -f "$HOME/.config/${i}" ]]; then
                 echo "\n${GREEN}${BOLD}Linking ${i}${RESET}"
                 mv "$HOME/.config/${i}" "$HOME/.config/${i}_backup"
-                ln "$HOME/.dotfiles/.config/${i}" "$HOME/.config"
+                ln "$HOME/.dotfiles/config/${i}" "$HOME/.config"
             fi
         done
         ;;
@@ -58,13 +58,13 @@ case $backup in
         # $HOME dotfiles
         for i in ${bash[@]}; do
             echo "\n${GREEN}${BOLD}Linking ${i}${RESET}"
-            ln -f "$HOME/.dotfiles/${i}" "$HOME"
+            ln -f "$HOME/.dotfiles/home/${i}" "$HOME"
         done
 
         # $HOME/.config dotfiles
         for i in ${dotconfig[@]}; do
             echo "\n${GREEN}${BOLD}Linking ${i}${RESET}"
-            ln -f "$HOME/.dotfiles/.config/${i}" "$HOME/.config"
+            ln -f "$HOME/.dotfiles/config/${i}" "$HOME/.config"
         done
         ;;
         # if the user typed anything else
@@ -73,17 +73,17 @@ case $backup in
         exit 1
         ;;
 esac
-
-#
-# checking for some packages
-# packages=(fzf nvim fzy)
-# for i in ${packages[@]}; do
-#     command -v "${i}" >/dev/null 2>&1
-#     if [[ $? -eq 0 ]]; then
-#         echo "Git command found"
-#     else
-#         echo "Git command not found"
-#         # echo "${RED}${BOLD}Installing fzf${RESET}"
-#         # sudo xbps-install -y fzf
-#     fi
-# done
+# #
+# # #
+# # # checking for some packages
+# # # packages=(fzf nvim fzy)
+# # # for i in ${packages[@]}; do
+# # #     command -v "${i}" >/dev/null 2>&1
+# # #     if [[ $? -eq 0 ]]; then
+# # #         echo "Git command found"
+# # #     else
+# # #         echo "Git command not found"
+# # #         # echo "${RED}${BOLD}Installing fzf${RESET}"
+# # #         # sudo xbps-install -y fzf
+# # #     fi
+# # # done
