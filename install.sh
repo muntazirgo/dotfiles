@@ -24,10 +24,12 @@ echo "${RED}${BOLD}Do you want to backup the old dotfiles? (Y/n) \c"
 # reading the user input
 read backup
 # checking the user input
-declare -a bash=( $(command ls ./.bash*) $(command ls ./.git*) ./.mpd ./.ncmpcpp ./.xinitrc $(command ls ./.zsh*) )
+declare -a bash=( $(command ls ./.bash*) ./.gitconfig ./.git-credentials ./.mpd ./.ncmpcpp ./.xinitrc $(command ls ./.zsh*) )
+declare -a dotconfig=( $(command ls ./.config/) )
 case $backup in
         # if the user typed yes or y or just pressed enter
     ""|[Yy]|[Yy][Ee][Ss])
+        # $HOME dotfiles
         for i in ${bash[@]}; do
             if [[ ! -f "$HOME/${i}" ]]; then
                 echo "\n${GREEN}${BOLD}Linking ${i}${RESET}"
@@ -38,12 +40,31 @@ case $backup in
                 ln "$HOME/.dotfiles/${i}" "$HOME"
             fi
         done
+
+        # $HOME/.config dotfiles
+        for i in ${dotconfig[@]}; do
+            if [[ ! -f "$HOME/.config/${i}" ]]; then
+                echo "\n${GREEN}${BOLD}Linking ${i}${RESET}"
+                ln "$HOME/.dotfiles/.config/${i}" "$HOME/.config"
+            elif [[ ! -L "$HOME/.config/${i}" && -f "$HOME/.config/${i}" ]]; then
+                echo "\n${GREEN}${BOLD}Linking ${i}${RESET}"
+                mv "$HOME/.config/${i}" "$HOME/.config/${i}_backup"
+                ln "$HOME/.dotfiles/.config/${i}" "$HOME/.config"
+            fi
+        done
         ;;
         # if the user typed no or n
     [Nn]|[Nn][Oo])
+        # $HOME dotfiles
         for i in ${bash[@]}; do
             echo "\n${GREEN}${BOLD}Linking ${i}${RESET}"
             ln -f "$HOME/.dotfiles/${i}" "$HOME"
+        done
+
+        # $HOME/.config dotfiles
+        for i in ${dotconfig[@]}; do
+            echo "\n${GREEN}${BOLD}Linking ${i}${RESET}"
+            ln -f "$HOME/.dotfiles/.config/${i}" "$HOME/.config"
         done
         ;;
         # if the user typed anything else
@@ -52,6 +73,8 @@ case $backup in
         exit 1
         ;;
 esac
+
+#
 # checking for some packages
 # packages=(fzf nvim fzy)
 # for i in ${packages[@]}; do

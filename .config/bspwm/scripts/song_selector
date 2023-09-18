@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+# Import Current Theme
+DIR="$HOME/.config/bspwm"
+STYLE="adaptive"
+RASI="$DIR/themes/$STYLE/rofi/music_player.rasi"
+
+# Rofi CMD
+rofi_command="rofi -theme ${RASI} -dmenu $* -i -format i"
+
+# Changing the height variable for the first menu
+sed -Ei 's/height: [0-9]+/height: 250/g' $RASI
+FIRST_MENU_OPTIONS="Play A Song\nRelaod Music List\nExit"
+
+CHOSEN=$(echo -e $FIRST_MENU_OPTIONS | $rofi_command)
+
+# Checking the choice of the user
+if [[ -z $CHOSEN ]]; then
+    exit 1
+elif [[ $(( $CHOSEN + 1 )) == "1" ]]; then
+    sed -Ei 's/height: [0-9]+/height: 515/g' $RASI
+    chosen_song=$(mpc playlist | $rofi_command)
+    if [[ -z $chosen_song ]]; then
+        exit 1
+    else
+        mpc play $(($chosen_song+1))
+    fi
+
+elif [[ $(( $CHOSEN + 1 )) == "2" ]]; then
+    number_of_songs=$(mpc playlist | wc -l)
+    for i in $(seq $number_of_songs); do
+        mpc del 1
+    done
+    python3 "$HOME/.config/bspwm/scripts/mpc_reload.py"
+elif [[ $(( $CHOSEN + 1 )) == "3" ]]; then
+    exit 1
+fi

@@ -441,3 +441,7 @@ exit
 ls -l
 ls -la
 exit
+ls -l
+clear
+ls -la
+exit

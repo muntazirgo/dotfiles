@@ -1,0 +1,6 @@
+
+* {
+    background:    #FFFFFFff;
+    foreground:    #404040ff;
+    BDR:   #5294E2ff;
+}
