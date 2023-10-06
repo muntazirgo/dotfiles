@@ -1,7 +1,0 @@
-[Configuration]
-LastActiveMode=THUNAR_RENAMER_MODE_NAME
-LastActiveRenamer=ThunarSbrCaseRenamer
-
-[ThunarSbrCaseRenamer]
-Mode=THUNAR_SBR_CASE_RENAMER_MODE_UPPER
-
