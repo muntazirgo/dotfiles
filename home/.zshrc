@@ -51,6 +51,7 @@ if [ ! -d "$HOME/.local/bin" ] ; then
 else
   PATH="$HOME/.local/bin:$PATH"
 fi
+PATH="$HOME/go/bin/:$HOME/.local/bin:$PATH"
 
 # exports
 export TERM="xterm-256color" # Getting Proper Colors
@@ -172,13 +173,13 @@ setopt HIST_FIND_NO_DUPS
 
 ### ALIASES ###
 
-# Changing "ls" to "exa"
-alias ls='exa --icons' # my preferred listing
-alias la='exa -a --color=always --group-directories-first'  # all files and dirs
-alias lsa='exa -la --color=always --group-directories-first'  # all files and dirs
-alias ll='exa -l --color=always --group-directories-first'  # long format
-alias lt='exa -aT --color=always --group-directories-first' # tree listing
-alias l.='exa -a | egrep "^\."'
+# Changing "ls" to "eza"
+alias ls='eza --icons' # my preferred listing
+alias la='eza -a --color=always --group-directories-first'  # all files and dirs
+alias lsa='eza -la --color=always --group-directories-first'  # all files and dirs
+alias ll='eza -l --color=always --group-directories-first'  # long format
+alias lt='eza -aT --color=always --group-directories-first' # tree listing
+alias l.='eza -a | egrep "^\."'
 
 # pacman and yay
 alias pacsyu='sudo pacman -Syu'                  # update only standard pkgs
@@ -312,3 +313,6 @@ ulimit -n 4096
 
 # Github Token
 # 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
+# 
+# termux-obsidian
+# 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
