@@ -315,4 +315,4 @@ ulimit -n 4096
 # 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
 # 
 # termux-obsidian
-# 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
+# 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
